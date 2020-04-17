@@ -36,9 +36,13 @@ function clearListCountries() {
 function checkListCountriesNameLength(country) {
   if (country.length >= 2 && country.length <= 10) {
     insertListCountries(country);
-  } else if (country.length === 1) {
+  }
+
+  if (country.length === 1) {
     insertCountry(country);
-  } else if (country.length > 10) {
+  }
+
+  if (country.length > 10) {
     PNotify.error({
       text: 'Too many mathes found. Please enter a more specific query!',
       styling: 'material',
@@ -48,26 +52,24 @@ function checkListCountriesNameLength(country) {
       minHeight: '120px',
       delay: 2000,
     });
-  } else {
-    PNotify.error({
-      text: 'No results for your request. Please еnter the correct data!',
-      styling: 'material',
-      icons: 'material',
-      icon: true,
-      width: '260px',
-      minHeight: '120px',
-      delay: 2000,
-    });
   }
+
+  PNotify.error({
+    text: 'No results for your request. Please еnter the correct data!',
+    styling: 'material',
+    icons: 'material',
+    icon: true,
+    width: '260px',
+    minHeight: '120px',
+    delay: 2000,
+  });
 }
 
 function fetchCountry(country) {
   clearListCountries();
-  if (country === '') {
-    return;
+  if (country) {
+    fetchCountries(country)
+      .then(countries => checkListCountriesNameLength(countries))
+      .catch(error => console.warn(error));
   }
-
-  fetchCountries(country)
-    .then(countries => checkListCountriesNameLength(countries))
-    .catch(error => console.warn(error));
 }
